@@ -15,7 +15,14 @@ namespace Expense_Tracker.Models
 
         [Column(TypeName = "nvarchar(10)")]
         public string Type { get; set; } = "Expense"; // because most of things will be exenses 
-
+        [NotMapped]
+        public string? TitleWithIcon
+        {
+            get
+            {
+                return this.Icon + " " + this.Title;
+            }
+        }
 
 
     }

@@ -27,6 +27,24 @@ body {
     font-size: x-large;
 }
 
+.btn:foucs, .btn:active{
+    outline:none !important;
+    box-shadow:none;
+}
+
+
+/*hyperlink*/
+.no-a-decoration, .no-a-decoration:hover{
+    text-decoration:none;
+    color:inherit;
+}
+
+/*grid */
+.e-grid{
+border : 0;
+border-radius: 5px;
+}
+
 /*Radio button group*/
 .e-btn-group.custom-rbt-group {
     width: 100%;
@@ -46,4 +64,11 @@ body {
     background-color : #fff;
     color: #212b36;
     border: 1px solid #fff;
+}
+
+/*Widget*/
+
+.widget{
+    border-radius: 1rem;
+    background : #1a222b;
 }
