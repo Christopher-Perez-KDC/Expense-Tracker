@@ -24,7 +24,23 @@ namespace Expense_Tracker.Controllers
             return View(await _context.Categories.ToListAsync());
         }
 
+        // GET: Category/Details/5
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
 
+            var category = await _context.Categories
+                .FirstOrDefaultAsync(m => m.CategoryId == id);
+            if (category == null)
+            {
+                return NotFound();
+            }
+
+            return View(category);
+        }
 
         // GET: Category/AddorEdit
 
@@ -46,9 +62,10 @@ namespace Expense_Tracker.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddOrEdit([Bind("CategoryId,Title,Icon,Type")] Category category )
         {
+            
             if (ModelState.IsValid)
             {
-                if (category.CategoryId == 0 )
+                if (category.CategoryId ==0)
                     _context.Add(category);
                 else
                     _context.Update(category);
@@ -90,6 +107,7 @@ namespace Expense_Tracker.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+
 
     }
 }
