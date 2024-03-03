@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Expense_Tracker.Models;
+using NuGet.Protocol;
 
 namespace Expense_Tracker.Controllers
 {
@@ -21,83 +22,69 @@ namespace Expense_Tracker.Controllers
         // GET: Category
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Categories.ToListAsync());
+            return _context.Categories != null ?
+                        View(await _context.Categories.ToListAsync()) :
+                        Problem("Entity set 'ApplicationDbContext.Categories'  is null.");
         }
 
-        // GET: Category/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
 
-            var category = await _context.Categories
-                .FirstOrDefaultAsync(m => m.CategoryId == id);
-            if (category == null)
-            {
-                return NotFound();
-            }
-
-            return View(category);
-        }
-
-        // GET: Category/AddorEdit
-
-        public IActionResult AddOrEdit(int id=0)
+        // GET: Category/AddOrEdit
+        public IActionResult AddOrEdit(int? id = 0)
         {
             if (id == 0)
-            
                 return View(new Category());
-            
-
             else
-             return View(_context.Categories.Find(id)); 
+                return View(_context.Categories.Find(id));
+
         }
 
-        // POST: Category/AddorEdit
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddOrEdit([Bind("CategoryId,Title,Icon,Type")] Category category )
         {
-            
             if (ModelState.IsValid)
             {
-                if (category.CategoryId ==0)
+                if (category.CategoryId == 0)
+                {
                     _context.Add(category);
+
+                }
                 else
+                {
                     _context.Update(category);
+
+                }
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(category);
         }
-
-        // GET: Category/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var category = await _context.Categories
-                .FirstOrDefaultAsync(m => m.CategoryId == id);
-            if (category == null)
+            var transaction = await _context.Transactions.FindAsync(id);
+            if (transaction == null)
             {
                 return NotFound();
             }
-
-            return View(category);
+            ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "Title", transaction.CategoryId);
+            return View(transaction);
         }
+
 
         // POST: Category/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            if (_context.Categories == null)
+            {
+                return Problem("Entity set 'ApplicationDbContext.Categories'  is null.");
+            }
             var category = await _context.Categories.FindAsync(id);
             if (category != null)
             {
@@ -107,7 +94,6 @@ namespace Expense_Tracker.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
-
 
     }
 }

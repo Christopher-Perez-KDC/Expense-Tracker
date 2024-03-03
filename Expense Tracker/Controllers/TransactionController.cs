@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -26,12 +27,10 @@ namespace Expense_Tracker.Controllers
         }
 
         // GET: Transaction/AddOrEdit
-        public IActionResult AddOrEdit(int id =0)
-
+        public IActionResult AddOrEdit(int id = 0)
         {
-
             PopulateCategories();
-            if(id == 0)
+            if (id == 0)
                 return View(new Transaction());
             else
                 return View(_context.Transactions.Find(id));
@@ -42,15 +41,14 @@ namespace Expense_Tracker.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddOrEdit([Bind("TranscationId,CategoryId,Amount,Note,Date")] Transaction transaction)
+        public async Task<IActionResult> AddOrEdit([Bind("TransactionId,CategoryId,Amount,Note,Date")] Transaction transaction)
         {
             if (ModelState.IsValid)
             {
-
-                if(transaction.TranscationId ==0)
+                if (transaction.TransactionId == 0)
                     _context.Add(transaction);
                 else
-                    _context.Update(transaction);                
+                    _context.Update(transaction);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
@@ -63,6 +61,10 @@ namespace Expense_Tracker.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            if (_context.Transactions == null)
+            {
+                return Problem("Entity set 'ApplicationDbContext.Transactions'  is null.");
+            }
             var transaction = await _context.Transactions.FindAsync(id);
             if (transaction != null)
             {
@@ -73,14 +75,14 @@ namespace Expense_Tracker.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+
         [NonAction]
         public void PopulateCategories()
         {
             var CategoryCollection = _context.Categories.ToList();
             Category DefaultCategory = new Category() { CategoryId = 0, Title = "Choose a Category" };
-            CategoryCollection.Insert(0,DefaultCategory);
+            CategoryCollection.Insert(0, DefaultCategory);
             ViewBag.Categories = CategoryCollection;
         }
-
     }
 }
