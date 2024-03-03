@@ -26,6 +26,9 @@ body {
 .e-bigger {
     font-size: x-large;
 }
+.maincontent{
+    margin-left:290px;
+}
 
 /*bread crumbs*/
 
@@ -71,6 +74,15 @@ border-radius: 5px;
     background-color : #fff;
     color: #212b36;
     border: 1px solid #fff;
+}
+
+/*sidebar*/
+
+#sidebar{
+    background-color:#12161d;
+    border-right:1px dashed rgba(75,82,85,0.24);
+    padding: 10px 20px;
+
 }
 
 /*Widget*/

@@ -3,40 +3,41 @@
 @{
     ViewData["PageTitle"] = Model.TranscationId == 0 ? "Create a new transaction" : "Edit transaction";
 }
-
 <div class="row">
     <div class="col-md-7">
         <div class="widget p-5 style=" background-color:#212b36"">
 
-            <form asp-action="Create">
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div> 
+            <form asp-action="AddOrEdit">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" name=" TransactionId" value="@Model.TranscationId" />
                 <div class="mb-3">
                     <ejs-datepicker id="date" ejs-for="Date"
                     placeholder="Date" floatLabelType="Always"
                     format="MMM-dd-yy"></ejs-datepicker>
-                    <span asp-validation-for="Date" class="text-danger"></span>
                 </div>
 
                 <div class="mb-3">
                     <ejs-dropdownlist id="ddlCategory" ejs-for="CategoryId"
                     dataSource="@ViewBag.Categories" placeholder="Category" 
-                    floatLabelType="Always">
+                    floatLabelType="Always" allowFiltering="true" ignoreAccent ="true"
+                    filterType="Contains" popupHeight="220px">
                     <e-dropdownlist-fields value ="CategoryId" text="TitleWithIcon"></e-dropdownlist-fields>
                     </ejs-dropdownlist>
+                    <span asp-validation-for="CategoryId" class="text-danger fs-6"></span>
             </div>
             <div class="mb-3">
-                <label asp-for="Amount" class="control-label"></label>
-                <input asp-for="Amount" class="form-control" />
-                <span asp-validation-for="Amount" class="text-danger"></span>
+                    <ejs-numerictextbox id="Amount" ejs-for="Amount"
+                    placeholder="Amount" floatLabelType=Always
+                    min="0" format ="c0" ></ejs-numerictextbox>
+                <span asp-validation-for="Amount" class="text-danger fs-06"></span>
             </div>
             <div class="mb-3">
-                <label asp-for="Note" class="control-label"></label>
-                <input asp-for="Note" class="form-control" />
-                <span asp-validation-for="Note" class="text-danger"></span>
+                    <ejs-textbox id="note" placeholder="Note" ejs-for="Note" 
+                    floatLabelType="Always" multiline="true"></ejs-textbox>
             </div>
              <div class="mb-3">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
+                    <ejs-button id="submit" typeof=" submit" cssClass="e-success" content="Submit"></ejs-button>
+                </div>
         </form>
     </div>
 </div>
@@ -47,7 +48,8 @@
 
 
 
-
+@* 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
+ *@
