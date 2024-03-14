@@ -19,7 +19,7 @@ namespace Expense_Tracker.Controllers
         {
             //Last 7 Days
 
-            DateTime StartDate = DateTime.Today.AddDays(-6);
+            DateTime StartDate = DateTime.Today.AddDays(-365);
             DateTime EndDate = DateTime.Today;
 
             List<Transaction> SelectedTransactions = await _context.Transactions
